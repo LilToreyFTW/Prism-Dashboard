@@ -1,11 +1,12 @@
-import { Activity, Blocks, Box, Code2, LayoutDashboard, LockKeyhole, Sparkles } from 'lucide-react';
+import { Activity, Blocks, Box, Code2, KeyRound, LayoutDashboard, LockKeyhole, Sparkles } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import AuthPanel from './components/AuthPanel';
 import Dashboard from './components/Dashboard';
 import AppBuilderPanel from './components/AppBuilderPanel';
+import LicenseKeysPanel from './components/LicenseKeysPanel';
 
-type View = 'dashboard' | 'builder';
+type View = 'dashboard' | 'builder' | 'licenses';
 
 export default function App() {
   const [authenticated, setAuthenticated] = useState(() => localStorage.getItem('prism-token') !== null);
@@ -14,7 +15,8 @@ export default function App() {
   const navigation = useMemo(
     () => [
       { id: 'dashboard' as const, label: 'Dashboard', icon: LayoutDashboard },
-      { id: 'builder' as const, label: 'App Builder', icon: Code2 }
+      { id: 'builder' as const, label: 'App Builder', icon: Code2 },
+      { id: 'licenses' as const, label: 'License Keys', icon: KeyRound }
     ],
     []
   );
@@ -70,12 +72,12 @@ export default function App() {
             <div>
               <p className="text-sm uppercase tracking-[0.32em] text-cyan-200/70">Prism Command Surface</p>
               <h1 className="mt-1 text-3xl font-bold text-white 2xl:text-5xl">
-                {view === 'dashboard' ? '4K Live Operations Dashboard' : 'Full-Stack App Builder'}
+                {view === 'dashboard' ? '4K Live Operations Dashboard' : view === 'builder' ? 'Full-Stack App Builder' : 'License Key Console'}
               </h1>
             </div>
             <div className="flex items-center gap-3 text-sm text-slate-300">
               <Activity className="size-5 text-emerald-300" />
-              Live backend on 147.189.172.104:4026
+              Backend connection active
             </div>
           </header>
 
@@ -87,7 +89,9 @@ export default function App() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.22 }}
             >
-              {view === 'dashboard' ? <Dashboard /> : <AppBuilderPanel />}
+              {view === 'dashboard' && <Dashboard />}
+              {view === 'builder' && <AppBuilderPanel />}
+              {view === 'licenses' && <LicenseKeysPanel />}
             </motion.div>
           </AnimatePresence>
         </section>
