@@ -49,3 +49,16 @@ export type BuilderRequest = {
   license_header?: string;
   initialize_git: boolean;
 };
+
+export type LicenseDuration = '1_month' | '6_month' | '12_month' | 'lifetime';
+
+export type LicenseKeyRecord = {
+  key: string;
+  duration: LicenseDuration;
+  created_at: string;
+  expires_at: string | null;
+  redeemed: boolean;
+  redeemed_by: string | null;
+  redeemed_at: string | null;
+  note: string | null;
+};
