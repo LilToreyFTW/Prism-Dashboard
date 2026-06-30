@@ -7,7 +7,7 @@ REM === CONFIGURATION ===
 set PROJECT_NAME=PrismDashboard
 set BUILD_TYPE=Release
 set BUILD_DIR=build
-set OBJ_DIR=%BUILD_DIR%\obj
+set OBJ_DIR=build\obj
 set VSWHERE="%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 
 REM Locate Visual Studio with the C++ toolchain.
@@ -51,7 +51,17 @@ if errorlevel 1 (
 echo Building %PROJECT_NAME%...
 
 if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
+if errorlevel 1 (
+    echo [ERROR] Could not create build directory: %CD%\%BUILD_DIR%
+    pause
+    exit /b 1
+)
 if not exist "%OBJ_DIR%" mkdir "%OBJ_DIR%"
+if errorlevel 1 (
+    echo [ERROR] Could not create object directory: %CD%\%OBJ_DIR%
+    pause
+    exit /b 1
+)
 
 set SOURCES=
 for %%f in (src\*.cpp) do call set SOURCES=%%SOURCES%% %%f
@@ -66,7 +76,7 @@ cl /EHsc /std:c++20 /O2 ^
     %SOURCES% ^
     /I "src" ^
     /I "auth" ^
-    /Fo"%OBJ_DIR%\\" ^
+    /Fo"%OBJ_DIR%\" ^
     /Fe"%BUILD_DIR%\%PROJECT_NAME%.exe" ^
     /link user32.lib gdi32.lib opengl32.lib
 
